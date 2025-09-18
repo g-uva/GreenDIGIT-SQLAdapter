@@ -4,3 +4,4 @@ bin/
 lib/
 .env
 lib64/
+__pycache__/

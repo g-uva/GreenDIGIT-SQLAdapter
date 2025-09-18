@@ -1,0 +1,31 @@
+{
+  "site_type": "grid",
+  "site_description": "INFN-T1 grid site",
+  "fact": {
+    "event_start_timestamp": "2025-09-18 13:00:00",
+    "event_end_timestamp": "2025-09-18 16:30:00",
+    "job_finished": true,
+    "CI_g": 40,
+    "CFP_g": 520,
+    "PUE": 1.42,
+    "site": "INFN-T1 grid site",
+    "energy_wh": 1800.0,
+    "work": 950.0,
+    "startexectime": "2025-09-18 13:00:10",
+    "stopexectime": "2025-09-18 16:29:50",
+    "status": "success",
+    "owner": "CNR",
+    "execunitid": "exec-grid-055",
+    "execunitfinished": true
+  },
+  "detail": {
+    "wallclocktime_s": 12600,
+    "cpunormalizationfactor": 10.5,
+    "ncores": 32,
+    "normcputime_s": 11500,
+    "efficiency": 0.88,
+    "tdp_w": 95,
+    "totalcputime_s": 12000,
+    "scaledcputime_s": 126000
+  }
+}

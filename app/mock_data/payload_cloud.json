@@ -1,0 +1,30 @@
+{
+  "site_type": "cloud",
+  "site_description": "AWS eu-central-1 cloud site",
+  "fact": {
+    "event_start_timestamp": "2025-09-18 09:00:00",
+    "event_end_timestamp": "2025-09-18 11:00:00",
+    "job_finished": true,
+    "CI_g": 46,
+    "CFP_g": 310,
+    "PUE": 1.38,
+    "site": "AWS eu-central-1 cloud site",
+    "energy_wh": 1180.2,
+    "work": 520.0,
+    "startexectime": "2025-09-18 09:00:05",
+    "stopexectime": "2025-09-18 10:59:55",
+    "status": "success",
+    "owner": "Roberto",
+    "execunitid": "exec-cloud-001",
+    "execunitfinished": true
+  },
+  "detail": {
+    "wallclocktime_s": 7200,
+    "suspendduration_s": 0,
+    "cpuduration_s": 7120,
+    "cpunormalizationfactor": 1.0,
+    "efficiency": 0.94,
+    "cloud_type": "IaaS",
+    "compute_service": "EC2"
+  }
+}
