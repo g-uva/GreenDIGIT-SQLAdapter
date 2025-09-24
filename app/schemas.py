@@ -50,3 +50,13 @@ class MetricsPayload(BaseModel):
     site_description: str = Field(..., description="Human readable site description; used to find or create the site")
     fact: FactEvent
     detail: dict
+
+class Sites(BaseModel):
+    site_type: Literal["cloud","network","grid","storage","jupyter"]
+
+class Envelope(BaseModel):
+    sites: Sites
+    fact_site_event: dict
+    detail_cloud: Optional[dict] = None
+    detail_network: Optional[dict] = None
+    detail_grid: Optional[dict] = None

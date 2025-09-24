@@ -17,7 +17,7 @@ curl -s localhost:8033/get-cnr-entry/123 | jq
 curl -s -X DELETE localhost:8033/delete-cnr-entry/123 | jq
 
 
-curl -s localhost:8033/submit-metrics -H 'content-type: application/json' \
+curl -s localhost:8033/cnr-sql-adapter -H 'content-type: application/json' \
      --data "{
   "site_type": "network",
   "site_description": "GARR backbone Milan link",
@@ -45,3 +45,26 @@ curl -s localhost:8033/submit-metrics -H 'content-type: application/json' \
     "destinationexecunitid": "exec-cloud-001"
   }
 }" | jq
+
+
+curl -s localhost:8033/cnr-sql-adapter -H 'content-type: application/json' \
+     --data "{
+  "site": "AEGIS01-IPB-SCL",
+  "duration_s": 3590,
+  "sites": { "site_type": "cloud" },
+  "fact_site_event": {
+    "site": "AEGIS01-IPB-SCL",
+    "event_start_timestamp": "2025-01-01T12:00:00Z",
+    "event_end_timestamp": "2025-01-01T13:00:00Z",
+    "execunitfinished": true,
+		"job_finished": true,
+    "startexectime": "2025-01-01T12:00:05Z",
+    "stopexectime": "2025-01-01T12:59:55Z",
+    "execunitid": "compute-12345"
+  },
+  "detail_cloud": {
+    "execunitid": "compute-12345"
+  }
+}" | jq
+
+
