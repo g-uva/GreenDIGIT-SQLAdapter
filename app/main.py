@@ -19,7 +19,7 @@ def _startup():
 def health():
     return {"status": "ok"}
 
-@app.post("/submit-metrics")
+@app.post("/cnr-sql-adapter")
 def submit_metrics(payload: MetricsPayload):
     conn = get_conn()
     try:
@@ -29,11 +29,11 @@ def submit_metrics(payload: MetricsPayload):
                 site_id = get_or_create_site(cur, payload.site_type, payload.site_description)
 
                 # Validate the detail block per type
-                if payload.site_type == "cloud":
+                if payload.sites.site_type == "cloud":
                     CloudDetail(**payload.detail)
-                elif payload.site_type == "network":
+                elif payload.sites.site_type == "network":
                     NetworkDetail(**payload.detail)
-                elif payload.site_type == "grid":
+                elif payload.sites.site_type == "grid":
                     GridDetail(**payload.detail)
                 else:
                     raise HTTPException(status_code=400, detail="Unsupported site_type")
