@@ -5,3 +5,5 @@ lib/
 .env
 lib64/
 __pycache__/
+lib64
+*.xml
