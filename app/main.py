@@ -43,7 +43,7 @@ def submit_metrics(payload: Envelope):
                 # site_id = get_or_create_site(cur, site_type, payload.fact_site_event.get("site"))
                 site_id = get_or_create_site(cur, payload.sites.site_type, payload.fact_site_event.get("site"))
                 
-                print(f"Site type: {site_type}")
+                print(f"Site type: {site_type} --> Site ID: {site_id}")
 
                 if site_type == "cloud":
                     detail = payload.detail_cloud; CloudDetail(**detail)
@@ -117,6 +117,73 @@ def delete_cnr_entry(event_id: int):
         return {"ok": True, "deleted_event_id": event_id, "site_type": site_type}
     except ValueError:
         raise HTTPException(status_code=404, detail="Event not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        put_conn(conn)
+
+@app.get("/entries/by-site/{site_id}")
+def list_entries_by_site(site_id: int):
+    conn = get_conn()
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT f.*, s.site_type::text AS site_type, s.description AS site_description
+                    FROM monitoring.fact_site_event f
+                    JOIN monitoring.sites s ON s.site_id = f.site_id
+                    WHERE f.site_id = %s
+                    ORDER BY f.event_id DESC
+                    """,
+                    (site_id,),
+                )
+                # rows = cur.fetchall()
+                cols = [desc[0] for desc in cur.description]
+                rows = [dict(zip(cols, r)) for r in cur.fetchall()]
+                return {"site_id": site_id, "count": len(rows), "events": rows}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        put_conn(conn)
+
+@app.delete("/entries/by-site/{site_id}")
+def delete_entries_by_site(site_id: int):
+    conn = get_conn()
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                # collect event_ids for that site
+                cur.execute("SELECT event_id FROM monitoring.fact_site_event WHERE site_id = %s", (site_id,))
+                ids = [r[0] for r in cur.fetchall()]
+                if not ids:
+                    return {"ok": True, "site_id": site_id, "deleted": 0, "event_ids": []}
+
+                deleted = 0
+                for eid in ids:
+                    delete_event(cur, eid)  # your helper handles detail + fact (and site_type resolution)
+                    deleted += 1
+
+                return {"ok": True, "site_id": site_id, "deleted": deleted, "event_ids": ids}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        put_conn(conn)
+
+@app.delete("/reset-all")
+def reset_all():
+    conn = get_conn()
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                # clear detail tables first because of FKs
+                cur.execute("TRUNCATE monitoring.detail_cloud CASCADE")
+                cur.execute("TRUNCATE monitoring.detail_network CASCADE")
+                cur.execute("TRUNCATE monitoring.detail_grid CASCADE")
+                # then clear fact + sites
+                cur.execute("TRUNCATE monitoring.fact_site_event CASCADE")
+                cur.execute("TRUNCATE monitoring.sites CASCADE")
+        return {"ok": True, "message": "All monitoring tables have been reset"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     finally:
