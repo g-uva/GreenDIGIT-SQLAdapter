@@ -22,7 +22,7 @@ CNR-SQL adapter for automated metrics submission from the CIM pipeline.
 
 Related repositories:
 - [GreenDIGIT-project](https://github.com/GreenDIGIT-project)
-- [GreenDIGIT-CIM](https://github.com/g-uva/GreenDIGIT-CIM)
+- [GreenDIGIT-CIM](https://github.com/atahir2/GreenDIGIT-CIM)
 - [GreenDIGIT-AuthServer](https://github.com/g-uva/GreenDIGIT-AuthServer)
 - [GreenDIGIT-KPIService](https://github.com/g-uva/GreenDIGIT-WP6-KPI-Service)
 
